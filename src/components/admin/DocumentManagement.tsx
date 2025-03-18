@@ -30,6 +30,7 @@ interface DocumentProps {
   uploadDate: string;
   size: string;
   progress?: number;
+  contextNotes?: string;
 }
 
 const DocumentManagement = () => {
@@ -40,6 +41,8 @@ const DocumentManagement = () => {
       status: "completed",
       uploadDate: "2023-10-15",
       size: "2.4 MB",
+      contextNotes:
+        "Contains the latest clinical guidelines for mental health practitioners. Important for treatment recommendations.",
     },
     {
       id: "2",
@@ -48,6 +51,8 @@ const DocumentManagement = () => {
       uploadDate: "2023-10-18",
       size: "1.8 MB",
       progress: 65,
+      contextNotes:
+        "Overview of different therapy approaches and their effectiveness for various conditions.",
     },
     {
       id: "3",
@@ -55,6 +60,8 @@ const DocumentManagement = () => {
       status: "failed",
       uploadDate: "2023-10-17",
       size: "5.2 MB",
+      contextNotes:
+        "Recent research findings on mental health treatments and outcomes.",
     },
     {
       id: "4",
@@ -62,16 +69,21 @@ const DocumentManagement = () => {
       status: "completed",
       uploadDate: "2023-10-10",
       size: "3.7 MB",
+      contextNotes:
+        "Best practices for patient care and communication in mental health settings.",
     },
   ]);
 
-  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(true);
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
+
+  const [newDocumentNotes, setNewDocumentNotes] = useState("");
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Placeholder for file upload functionality
     console.log("Files selected:", e.target.files);
-    // In a real implementation, this would handle the file upload process
+    console.log("Context notes:", newDocumentNotes);
+    // In a real implementation, this would handle the file upload process with the context notes
   };
 
   const handleRemoveDocument = (id: string) => {
@@ -148,6 +160,17 @@ const DocumentManagement = () => {
                       PDF, DOCX, TXT (Max 10MB per file)
                     </p>
                   </label>
+                </div>
+                <div className="mt-4">
+                  <label className="text-sm font-medium mb-2 block">
+                    Document Context & Instructions
+                  </label>
+                  <textarea
+                    className="w-full min-h-[100px] p-3 border rounded-md text-sm"
+                    placeholder="Provide context and instructions about this document for the AI agent (e.g., 'This document contains clinical guidelines that should be referenced when discussing treatment options')"
+                    value={newDocumentNotes}
+                    onChange={(e) => setNewDocumentNotes(e.target.value)}
+                  />
                 </div>
               </div>
               <DialogFooter>
@@ -244,6 +267,15 @@ interface DocumentCardProps {
 }
 
 const DocumentCard = ({ document, onRemove = () => {} }: DocumentCardProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [contextNotes, setContextNotes] = useState(document.contextNotes || "");
+
+  const handleSaveNotes = () => {
+    // In a real implementation, this would save the notes to the backend
+    console.log("Saving notes for document", document.id, contextNotes);
+    setIsEditing(false);
+  };
+
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-0">
@@ -274,6 +306,43 @@ const DocumentCard = ({ document, onRemove = () => {} }: DocumentCardProps) => {
                 </span>
               </div>
             )}
+            <div className="mt-3">
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-sm font-medium">
+                  Context & Instructions:
+                </span>
+                {!isEditing ? (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsEditing(true)}
+                    className="h-6 text-xs"
+                  >
+                    Edit
+                  </Button>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleSaveNotes}
+                    className="h-6 text-xs"
+                  >
+                    Save
+                  </Button>
+                )}
+              </div>
+              {isEditing ? (
+                <textarea
+                  className="w-full min-h-[80px] p-2 text-sm border rounded-md"
+                  value={contextNotes}
+                  onChange={(e) => setContextNotes(e.target.value)}
+                />
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  {contextNotes || "No context provided"}
+                </p>
+              )}
+            </div>
           </div>
           <Button
             variant="ghost"
