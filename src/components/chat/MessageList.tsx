@@ -82,10 +82,10 @@ const MessageList = ({
               )}
               <div
                 className={cn(
-                  "rounded-lg p-3",
+                  "p-3 shadow-sm animate-gentle",
                   message.sender === "user"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted",
+                    ? "chat-bubble-user"
+                    : "chat-bubble-ai",
                 )}
               >
                 <div className="whitespace-pre-wrap break-words">

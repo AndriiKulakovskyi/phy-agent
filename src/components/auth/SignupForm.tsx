@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Eye, EyeOff, LogIn } from "lucide-react";
+import { Eye, EyeOff, UserPlus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,44 +23,59 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const formSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters" }),
-});
+const formSchema = z
+  .object({
+    name: z.string().min(2, { message: "Name must be at least 2 characters" }),
+    email: z.string().email({ message: "Please enter a valid email address" }),
+    password: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 type FormValues = z.infer<typeof formSchema>;
 
-interface LoginFormProps {
-  onLogin?: (values: FormValues) => void;
+interface SignupFormProps {
+  onSignup?: (values: Omit<FormValues, "confirmPassword">) => void;
   isLoading?: boolean;
   error?: string | null;
-  onCreateAccount?: () => void;
+  onLoginClick?: () => void;
 }
 
-const LoginForm = ({
-  onLogin = () => {},
+const SignupForm = ({
+  onSignup = () => {},
   isLoading = false,
   error = null,
-  onCreateAccount = () => {},
-}: LoginFormProps) => {
+  onLoginClick = () => {},
+}: SignupFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
   const handleSubmit = (values: FormValues) => {
-    onLogin(values);
+    const { confirmPassword, ...signupData } = values;
+    onSignup(signupData);
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   return (
@@ -68,10 +83,10 @@ const LoginForm = ({
       <Card className="w-full max-w-md bg-white shadow-lg">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center text-primary">
-            Welcome Back
+            Create an Account
           </CardTitle>
           <CardDescription className="text-center text-slate-500">
-            Sign in to your account to continue
+            Sign up to get started with our services
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -85,6 +100,25 @@ const LoginForm = ({
                   {error}
                 </div>
               )}
+
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="John Doe"
+                        type="text"
+                        {...field}
+                        className="bg-slate-50"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}
@@ -139,15 +173,39 @@ const LoginForm = ({
                 )}
               />
 
-              <div className="text-right">
-                <Button
-                  variant="link"
-                  className="text-sm text-primary p-0 h-auto"
-                  onClick={() => console.log("Forgot password clicked")}
-                >
-                  Forgot password?
-                </Button>
-              </div>
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <div className="relative">
+                      <FormControl>
+                        <Input
+                          placeholder="••••••••"
+                          type={showConfirmPassword ? "text" : "password"}
+                          {...field}
+                          className="bg-slate-50 pr-10"
+                        />
+                      </FormControl>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-0 top-0 h-full px-3 py-2 text-slate-400"
+                        onClick={toggleConfirmPasswordVisibility}
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOff size={18} />
+                        ) : (
+                          <Eye size={18} />
+                        )}
+                      </Button>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <Button
                 type="submit"
@@ -157,12 +215,12 @@ const LoginForm = ({
                 {isLoading ? (
                   <div className="flex items-center justify-center">
                     <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                    Signing in...
+                    Creating account...
                   </div>
                 ) : (
                   <div className="flex items-center justify-center">
-                    <LogIn className="mr-2 h-4 w-4" />
-                    Sign In
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Sign Up
                   </div>
                 )}
               </Button>
@@ -171,13 +229,13 @@ const LoginForm = ({
         </CardContent>
         <CardFooter className="flex justify-center border-t p-6">
           <p className="text-sm text-slate-500">
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <Button
               variant="link"
               className="p-0 h-auto text-primary"
-              onClick={onCreateAccount}
+              onClick={onLoginClick}
             >
-              Create account
+              Sign in
             </Button>
           </p>
         </CardFooter>
@@ -186,4 +244,4 @@ const LoginForm = ({
   );
 };
 
-export default LoginForm;
+export default SignupForm;

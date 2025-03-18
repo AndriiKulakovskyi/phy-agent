@@ -28,7 +28,7 @@ const AccessibilityControls = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 w-72 rounded-lg border bg-background p-4 shadow-lg">
+    <div className="fixed bottom-4 right-4 z-50 w-72 rounded-therapeutic border border-primary/20 bg-background/90 backdrop-blur-sm p-4 shadow-therapeutic">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Settings className="h-5 w-5" />

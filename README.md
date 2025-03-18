@@ -2,6 +2,14 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+## Connect to the application:
+You can test the forms with these credentials:
+
+Login: email="patient@example.com", password="password" (for patient dashboard)
+Login: email="admin@example.com", password="password" (for admin dashboard)
+Signup: Any email except "taken@example.com" will work
+
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh

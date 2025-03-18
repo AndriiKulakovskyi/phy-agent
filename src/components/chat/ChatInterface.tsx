@@ -106,8 +106,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     : messages;
 
   return (
-    <div className={`flex flex-col h-full w-full bg-background ${className}`}>
-      <div className="flex items-center justify-between p-4 border-b">
+    <div
+      className={`flex flex-col h-full w-full bg-therapeutic-gradient ${className}`}
+    >
+      <div className="flex items-center justify-between p-4 border-b bg-background/80 backdrop-blur-sm">
         <h2 className="text-xl font-semibold">Therapy Chat</h2>
         <div className="flex items-center gap-2">
           <TooltipProvider>

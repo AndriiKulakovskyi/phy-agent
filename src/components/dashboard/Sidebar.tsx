@@ -53,7 +53,7 @@ const Sidebar = ({
   ];
 
   return (
-    <div className="flex flex-col h-full w-[280px] bg-slate-50 border-r border-slate-200 p-4">
+    <div className="flex flex-col h-full w-[280px] bg-sidebar-gradient border-r border-border/50 p-4">
       <div className="flex items-center space-x-3 mb-8 pt-2">
         <Avatar className="h-10 w-10">
           <AvatarImage src={userAvatar} alt={userName} />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "./auth/LoginForm";
+import SignupForm from "./auth/SignupForm";
 import PatientDashboard from "./dashboard/PatientDashboard";
 import AdminDashboard from "./dashboard/AdminDashboard";
 import AccessibilityControls from "./accessibility/AccessibilityControls";
@@ -27,6 +28,7 @@ const Home = ({ initialUser = null }: HomeProps) => {
   const [error, setError] = useState<string | null>(null);
   const [showAccessibilityControls, setShowAccessibilityControls] =
     useState(false);
+  const [showSignup, setShowSignup] = useState(false);
 
   // Mock authentication function
   const handleLogin = async ({
@@ -79,11 +81,70 @@ const Home = ({ initialUser = null }: HomeProps) => {
     setShowAccessibilityControls(!showAccessibilityControls);
   };
 
+  // Handle signup form submission
+  const handleSignup = async ({
+    name,
+    email,
+    password,
+  }: {
+    name: string;
+    email: string;
+    password: string;
+  }) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // Mock signup logic - in a real app, this would call an API
+      if (email === "taken@example.com") {
+        setError("This email is already registered");
+      } else {
+        // Create a new user
+        setUser({
+          id: "3",
+          name: name,
+          email: email,
+          role: "patient",
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
+        });
+        setShowSignup(false);
+      }
+    } catch (err) {
+      setError("An error occurred during signup. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Toggle between login and signup forms
+  const toggleAuthForm = () => {
+    setShowSignup(!showSignup);
+    setError(null);
+  };
+
   // Render the appropriate component based on authentication state and user role
   const renderContent = () => {
     if (!user) {
+      if (showSignup) {
+        return (
+          <SignupForm
+            onSignup={handleSignup}
+            isLoading={isLoading}
+            error={error}
+            onLoginClick={toggleAuthForm}
+          />
+        );
+      }
       return (
-        <LoginForm onLogin={handleLogin} isLoading={isLoading} error={error} />
+        <LoginForm
+          onLogin={handleLogin}
+          isLoading={isLoading}
+          error={error}
+          onCreateAccount={toggleAuthForm}
+        />
       );
     }
 

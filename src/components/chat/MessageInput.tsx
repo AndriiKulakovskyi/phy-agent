@@ -47,7 +47,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   };
 
   return (
-    <div className="w-full bg-background border-t p-4 flex flex-col gap-2">
+    <div className="w-full bg-background/80 backdrop-blur-sm border-t p-4 flex flex-col gap-2">
       <div className="flex items-end gap-2">
         <Textarea
           ref={textareaRef}
@@ -56,7 +56,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled || isRecording}
-          className="min-h-[60px] max-h-[120px] resize-none flex-1"
+          className="min-h-[60px] max-h-[120px] resize-none flex-1 rounded-therapeutic border-primary/20 focus-visible:ring-primary/40"
           aria-label="Message input"
         />
         <div className="flex gap-2">
