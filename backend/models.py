@@ -59,7 +59,7 @@ class Message(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     sentiment = Column(String, nullable=True)  # Sentiment analysis of the message
     intent = Column(String, nullable=True)  # Detected intent of the message
-    metadata = Column(JSON, nullable=True)  # Additional metadata about the message
+    message_metadata = Column(JSON, nullable=True)  # Additional metadata about the message
 
     # Relationships
     conversation = relationship("Conversation", back_populates="messages")

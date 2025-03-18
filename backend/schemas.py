@@ -34,7 +34,7 @@ class UserProfileResponse(UserProfileBase):
     updated_at: Optional[datetime] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class UserResponse(UserBase):
     id: int
@@ -44,7 +44,7 @@ class UserResponse(UserBase):
     preferences: Optional[UserPreferences] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Conversation schemas
 class ConversationBase(BaseModel):
@@ -66,7 +66,7 @@ class ConversationResponse(ConversationBase):
     sentiment: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Message schemas
 class MessageBase(BaseModel):
@@ -88,10 +88,10 @@ class MessageResponse(MessageBase):
     created_at: datetime
     sentiment: Optional[str] = None
     intent: Optional[str] = None
-    metadata: Optional[MessageMetadata] = None
+    message_metadata: Optional[MessageMetadata] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Document schemas
 class DocumentBase(BaseModel):
@@ -111,7 +111,7 @@ class DocumentResponse(DocumentBase):
     chunk_count: Optional[int] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Chat completion schemas
 class ChatMessage(BaseModel):
@@ -129,3 +129,6 @@ class ChatCompletionRequest(BaseModel):
 class ChatCompletionResponse(BaseModel):
     message: ChatMessage
     metadata: Optional[Dict[str, Any]] = None
+
+    class Config:
+        from_attributes = True

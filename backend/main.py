@@ -6,6 +6,7 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 import os
 import json
+import uvicorn
 
 # Import your modules
 from .database import get_db, engine
@@ -278,7 +279,7 @@ async def create_message(conversation_id: int, message: MessageCreate, backgroun
         content=ai_response,
         sender="ai",
         conversation_id=conversation_id,
-        metadata=metadata
+        message_metadata=metadata
     )
     db.add(ai_message)
     db.commit()
@@ -301,7 +302,7 @@ async def create_message(conversation_id: int, message: MessageCreate, backgroun
             "content": ai_message.content,
             "sender": ai_message.sender,
             "created_at": ai_message.created_at,
-            "metadata": ai_message.metadata
+            "metadata": ai_message.message_metadata
         }
     }
 
@@ -320,7 +321,7 @@ async def get_messages(conversation_id: int, current_user: User = Depends(get_cu
         "created_at": msg.created_at,
         "sentiment": msg.sentiment,
         "intent": msg.intent,
-        "metadata": msg.metadata
+        "metadata": msg.message_metadata
     } for msg in messages]
 
 # Document routes (for RAG)
@@ -547,5 +548,5 @@ async def update_conversation_metadata(db: Session, conversation_id: int):
         db.close()
 
 if __name__ == "__main__":
-    import uvicorn
+    
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
