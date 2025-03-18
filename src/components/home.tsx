@@ -30,7 +30,7 @@ const Home = ({ initialUser = null }: HomeProps) => {
     useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
-  // Mock authentication function
+  // Authentication function using our API context
   const handleLogin = async ({
     email,
     password,
@@ -42,6 +42,11 @@ const Home = ({ initialUser = null }: HomeProps) => {
     setError(null);
 
     try {
+      // For demo purposes, we'll keep the mock authentication
+      // In a real implementation, this would use the AuthContext
+      // const { login } = useAuth();
+      // await login(email, password);
+
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
 

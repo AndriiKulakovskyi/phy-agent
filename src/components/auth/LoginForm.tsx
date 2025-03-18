@@ -57,6 +57,8 @@ const LoginForm = ({
 
   const handleSubmit = (values: FormValues) => {
     onLogin(values);
+    // In a real implementation with our API:
+    // onLogin({ email: values.email, password: values.password });
   };
 
   const togglePasswordVisibility = () => {

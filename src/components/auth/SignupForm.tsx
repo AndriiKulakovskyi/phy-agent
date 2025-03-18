@@ -68,6 +68,8 @@ const SignupForm = ({
   const handleSubmit = (values: FormValues) => {
     const { confirmPassword, ...signupData } = values;
     onSignup(signupData);
+    // In a real implementation with our API:
+    // onSignup({ name: values.name, email: values.email, password: values.password });
   };
 
   const togglePasswordVisibility = () => {
